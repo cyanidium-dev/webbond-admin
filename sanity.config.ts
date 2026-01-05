@@ -10,7 +10,25 @@ export default defineConfig({
   projectId: 'sovll42h',
   dataset: 'production',
 
-  plugins: [structureTool(), visionTool()],
+  plugins: [
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title('Контент')
+          .items([
+            S.listItem()
+              .title('Сторінки кейсів')
+              .schemaType('case')
+              .child(
+                S.documentList()
+                  .title('Сторінки кейсів')
+                  .filter('_type == "case"')
+                  .defaultOrdering([{field: '_createdAt', direction: 'desc'}]),
+              ),
+          ]),
+    }),
+    visionTool(),
+  ],
 
   schema: {
     types: schemaTypes,
