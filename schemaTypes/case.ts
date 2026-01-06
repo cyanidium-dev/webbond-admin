@@ -28,6 +28,37 @@ export default defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'homepageImage',
+      title: 'Зображення для головної сторінки',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          type: 'string',
+          title: 'Альтернативний текст',
+          description: 'Важливо для SEO та доступності',
+        }),
+      ],
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const showOnHomepage = (context.parent as {showOnHomepage?: boolean})?.showOnHomepage
+          if (showOnHomepage && !value) {
+            return 'Зображення для головної сторінки обов\'язкове, коли увімкнено "Показувати на головній"'
+          }
+          return true
+        }),
+    }),
+    defineField({
+      name: 'homepageOrder',
+      title: 'Порядок відображення на головній',
+      type: 'number',
+      description: 'Чим менше число, тим вище кейс відображається на головній сторінці',
+      initialValue: 0,
+    }),
+    defineField({
       name: 'hero',
       title: 'Блок Hero',
       type: 'object',
@@ -53,7 +84,14 @@ export default defineType({
           options: {
             hotspot: true,
           },
-          validation: (Rule) => Rule.required(),
+          fields: [
+            defineField({
+              name: 'alt',
+              type: 'string',
+              title: 'Альтернативний текст',
+              description: 'Важливо для SEO та доступності',
+            }),
+          ],
         }),
       ],
     }),
